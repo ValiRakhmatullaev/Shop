@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+from shop.models import Order
+
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=100, required=True)
@@ -11,3 +13,9 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'password1', 'password2', 'email')
+
+
+class CreateOrderForm(forms.ModelForm):
+
+    def save(self, commit=True):
+        return super().save(commit)

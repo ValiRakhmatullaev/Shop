@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -42,6 +43,27 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Order(models.Model):
+    CREATED_TYPE = 1
+    ACCEPTED_TYPE = 2
+    FINISHED_TYPE = 3
+    STATUS_COLORS = (
+        (CREATED_TYPE, '#0022FF'),
+        (ACCEPTED_TYPE, '#FFFF00'),
+        (FINISHED_TYPE, '#11FF00')
+    )
+    STATUS_TYPES = (
+        (CREATED_TYPE, 'Created'),
+        (ACCEPTED_TYPE, 'Accepted'),
+        (FINISHED_TYPE, 'Finished')
+    )
+    status = models.PositiveSmallIntegerField(default=CREATED_TYPE)
+    price = models.DecimalField(max_digits=9, decimal_places=2)
+    start_datetime = models.DateTimeField(default=timezone.now)
+    accept_datetime = models.DateTimeField(blank=True, null=True)
+    finish_datetime = models.DateTimeField(blank=True, null=True)
 
 
 class Cart(models.Model):

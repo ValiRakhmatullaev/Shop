@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
+from .views import ListMyOrdersView
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -13,4 +14,6 @@ urlpatterns = [
     path('account/create/', views.signUpView, name='signup'),
     path('account/login/', views.loginView, name='login'),
     path('account/logout/', views.logoutView, name='logout'),
+    path('list_my_orders/', ListMyOrdersView.as_view(), name='list_my_orders'),
+
 ]

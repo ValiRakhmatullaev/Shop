@@ -1,11 +1,49 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import Group, User
-from .forms import SignUpForm
+from django.urls import reverse_lazy
+from django.views.generic import FormView, ListView
+
+from .forms import SignUpForm, CreateOrderForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 # Create your views here.
-from shop.models import Category, Product, Cart, CartItem
+from shop.models import Category, Product, Cart, CartItem, Order
+
+
+class CreateOrderView(FormView):
+    template_name = 'create_order.html'
+    form_class = CreateOrderForm
+    success_url = reverse_lazy('list_my_orders')
+    extra_context = {'title': 'Create order'}
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        return form
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        form.save_m2m()
+        return super().form_valid(form)
+
+
+class ListMyOrdersView(ListView):
+    template_name = 'list_my_orders.html'
+    extra_context = {'title': 'List my orders', 'order_model': Order}
+    ordering = '-start_datetime'
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter()
+
+    def order_history(request, username):
+        order_qs = Order.objects.filter(user__username=username)
+
+        context = {
+            'order_qs': order_qs,
+        }
+        return render(request, 'list_my_orders.html', context)
 
 
 def home(request, category_slug=None):
@@ -114,7 +152,7 @@ def loginView(request):
                 return redirect('signup')
 
     else:
-            form = AuthenticationForm()
+        form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
 

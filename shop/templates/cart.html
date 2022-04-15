@@ -6,7 +6,6 @@
 Cart
 {% endblock %}
 {% block content %}
-
 {% if not cart_items %}
 <div class="text-center">
     <br>
@@ -60,13 +59,17 @@ Cart
                 <td>
                     <a href="{% url 'add_cart' cart_item.product.id %}"><i
                             class="material-icons text-warning material-icons">add_shopping_cart</i></a>
-                    <a href="{% url 'cart_remove' cart_item.product.id %}"><i class="material-icons text-warning material-icons">remove_circle_outline</i></a>
-                    <a href="{% url 'cart_remove_product' cart_item.product.id %}"><i class="material-icons text-warning material-icons">delete_forever</i></a>
+                    <a href="{% url 'cart_remove' cart_item.product.id %}"><i
+                            class="material-icons text-warning material-icons">remove_circle_outline</i></a>
+                    <a href="{% url 'cart_remove_product' cart_item.product.id %}"><i
+                            class="material-icons text-warning material-icons">delete_forever</i></a>
                 </td>
                 {% else %}
                 <td>
-                    <a href="{% url 'cart_remove' cart_item.product.id %}"><i class="material-icons text-warning material-icons">remove_circle_outline</i></a>
-                    <a href="{% url 'cart_remove_product' cart_item.product.id %}"><i class="material-icons text-warning material-icons">delete_forever</i></a>
+                    <a href="{% url 'cart_remove' cart_item.product.id %}"><i
+                            class="material-icons text-warning material-icons">remove_circle_outline</i></a>
+                    <a href="{% url 'cart_remove_product' cart_item.product.id %}"><i
+                            class="material-icons text-warning material-icons">delete_forever</i></a>
                 </td>
                 {% endif %}
             </tr>
@@ -90,6 +93,23 @@ Cart
             </tr>
             <tr class="text-left">
                 <td>
+                    First name: <strong>{{ request.user.first_name }}</strong>
+                </td>
+            </tr>
+            <tr class="text-left">
+                <td>
+                    Last name: <strong>{{ request.user.last_name }}</strong>
+                </td>
+            </tr>
+            <tr class="text-left">
+                <td>
+
+                  Email : <strong>{{ request.user.email }}</strong>
+                </td>
+            </tr>
+             <tr class="text-left">
+                <td>
+
                     Your total bill is: <strong>${{ total }}</strong>
                 </td>
             </tr>
@@ -99,15 +119,17 @@ Cart
             <a href="{% url 'home' %}">
                 <button type="button" class="btn btn-lg btn-block bg-dark text-warning">
                     Back to Products
-
+                </button>
+            </a>
+             <a href="{% url 'list_my_orders' %}">
+                <button type="button" class="btn btn-lg btn-block bg-dark text-warning">
+                    Submit
                 </button>
             </a>
         </div>
-
+    </div>
+    <div class="input-group flex-nowrap">
     </div>
 </div>
-
 {% endif %}
-
-
 {% endblock %}
