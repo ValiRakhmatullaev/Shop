@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from shop.models import Order
+# from shop.models import Order
 
 
 class SignUpForm(UserCreationForm):
@@ -15,7 +15,7 @@ class SignUpForm(UserCreationForm):
         fields = ('first_name', 'last_name', 'username', 'password1', 'password2', 'email')
 
 
-class CreateOrderForm(forms.ModelForm):
-
-    def save(self, commit=True):
-        return super().save(commit)
+# class CreateOrderForm(forms.ModelForm):
+#
+#     def save(self, commit=True):
+#         return super().save(commit)

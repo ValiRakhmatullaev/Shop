@@ -1,6 +1,12 @@
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.db import models
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import strip_tags
+
+from online_sales.settings import EMAIL_HOST_USER
 
 
 class Category(models.Model):
@@ -45,25 +51,17 @@ class Product(models.Model):
         return self.name
 
 
-class Order(models.Model):
-    CREATED_TYPE = 1
-    ACCEPTED_TYPE = 2
-    FINISHED_TYPE = 3
-    STATUS_COLORS = (
-        (CREATED_TYPE, '#0022FF'),
-        (ACCEPTED_TYPE, '#FFFF00'),
-        (FINISHED_TYPE, '#11FF00')
-    )
-    STATUS_TYPES = (
-        (CREATED_TYPE, 'Created'),
-        (ACCEPTED_TYPE, 'Accepted'),
-        (FINISHED_TYPE, 'Finished')
-    )
-    status = models.PositiveSmallIntegerField(default=CREATED_TYPE)
-    price = models.DecimalField(max_digits=9, decimal_places=2)
-    start_datetime = models.DateTimeField(default=timezone.now)
-    accept_datetime = models.DateTimeField(blank=True, null=True)
-    finish_datetime = models.DateTimeField(blank=True, null=True)
+# class Order(models.Model):
+#     CREATED_TYPE = 1
+#     STATUS_COLORS = (
+#         (CREATED_TYPE, '#0022FF'),
+#     )
+#     STATUS_TYPES = (
+#         (CREATED_TYPE, 'Created'),
+#     )
+#     status = models.PositiveSmallIntegerField(default=CREATED_TYPE)
+#     price = models.DecimalField(max_digits=9, decimal_places=2)
+#     start_datetime = models.DateTimeField(default=timezone.now)
 
 
 class Cart(models.Model):
@@ -92,3 +90,11 @@ class CartItem(models.Model):
 
     def __str__(self):
         return self.product
+
+    def accept(self):
+        self.accept_datetime = timezone.now()
+        self.save()
+        html = render_to_string('emails/accept_email.html', {'cart': self,
+                                                             'user': User})
+        plain_message = strip_tags(html)
+        send_mail('order accepted', plain_message, EMAIL_HOST_USER, (User.email,), html_message=html)

@@ -58,18 +58,18 @@ Cart
                 {% if cart_item.quantity < cart_item.product.stock %}
                 <td>
                     <a href="{% url 'add_cart' cart_item.product.id %}"><i
-                            class="material-icons text-warning material-icons">add_shopping_cart</i></a>
+                            class="material-icons text-primary material-icons">add_shopping_cart</i></a>
                     <a href="{% url 'cart_remove' cart_item.product.id %}"><i
-                            class="material-icons text-warning material-icons">remove_circle_outline</i></a>
+                            class="material-icons text-primary material-icons">remove_circle_outline</i></a>
                     <a href="{% url 'cart_remove_product' cart_item.product.id %}"><i
-                            class="material-icons text-warning material-icons">delete_forever</i></a>
+                            class="material-icons text-primary material-icons">delete_forever</i></a>
                 </td>
                 {% else %}
                 <td>
                     <a href="{% url 'cart_remove' cart_item.product.id %}"><i
-                            class="material-icons text-warning material-icons">remove_circle_outline</i></a>
+                            class="material-icons text-primary material-icons">remove_circle_outline</i></a>
                     <a href="{% url 'cart_remove_product' cart_item.product.id %}"><i
-                            class="material-icons text-warning material-icons">delete_forever</i></a>
+                            class="material-icons text-primary material-icons">delete_forever</i></a>
                 </td>
                 {% endif %}
             </tr>
@@ -117,13 +117,8 @@ Cart
         </table>
         <div class="mx-auto">
             <a href="{% url 'home' %}">
-                <button type="button" class="btn btn-lg btn-block bg-dark text-warning">
+                <button type="button" class="btn btn-lg btn-block bg-dark text-primary">
                     Back to Products
-                </button>
-            </a>
-             <a href="{% url 'list_my_orders' %}">
-                <button type="button" class="btn btn-lg btn-block bg-dark text-warning">
-                    Submit
                 </button>
             </a>
         </div>

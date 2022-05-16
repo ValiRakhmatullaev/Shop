@@ -2,45 +2,16 @@
 
 {% load static %}
 
+{% block title %}
+Email
+{% endblock %}
+
 {% block content %}
-<div class="color_block">
-    {% for color, type in order_model.types %}
-    <span class="dot" style="background-color: {{ color }}"></span> - {{ type }}
-    {% endfor %}
-</div>
-<ul>
-    {% for order in cart_items %}
-    <div class="card text-center mb-3">
-        <div class="card-header">
-            <P1>Заказ № {{ cart_item.product.id }}</P1>
-        </div>
-        <div class="card-body">
-            <div class="container mb-3">
-                <div class="row">
-                    <div class="col-8">
-                        <h5 class="card-title">
-                            <a> {{ order }}</a>
-                        </h5>
-                    </div>
-                    <div class="col-4">
-                        <span class="dot" style="background-color: {{ order.color }}"></span>
-                    </div>
-                </div>
-                {% if request.user or order.status == order_model.FINISHED_TYPE %}
-                <a href="{% url 'detail_order' pk=order.id %}" class="btn btn-primary ">Детали заказа </a>
-                {% else %}
-                <div class="row">
-                    <div class="col-6">
-                        <a href="{% url 'detail_order' pk=order.id %}" class="btn btn-primary ">Детали заказа </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="{% url 'finish_order' pk=order.id %}" class="btn btn-primary ">Закончить заказ</a>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</ul>
+<h1>EMail</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ forms.as_p }}
+    <buttom type="submit" class="btn btn-primary btn-block">Send</buttom>
+</form>
 {% endblock %}

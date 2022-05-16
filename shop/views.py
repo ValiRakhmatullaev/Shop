@@ -1,49 +1,83 @@
+from django.core.checks import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.forms import model_to_dict
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import Group, User
 from django.urls import reverse_lazy
 from django.views.generic import FormView, ListView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .forms import SignUpForm, CreateOrderForm
+from .forms import SignUpForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 # Create your views here.
-from shop.models import Category, Product, Cart, CartItem, Order
+from shop.models import Category, Product, Cart, CartItem
+from .serializers import ProductSerializer
+from django.core.mail import send_mail
 
 
-class CreateOrderView(FormView):
-    template_name = 'create_order.html'
-    form_class = CreateOrderForm
-    success_url = reverse_lazy('list_my_orders')
-    extra_context = {'title': 'Create order'}
+# class CreateOrderView(FormView):
+#     template_name = 'create_order.html'
+#     form_class = CreateOrderForm
+#     success_url = reverse_lazy('list_my_orders')
+#     extra_context = {'title': 'Create order'}
+#
+#     def get_form(self, form_class=None):
+#         form = super().get_form(form_class)
+#         return form
+#
+#     def form_valid(self, form):
+#         self.object = form.save(commit=False)
+#         self.object.save()
+#         form.save_m2m()
+#         return super().form_valid(form)
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        return form
 
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.save()
-        form.save_m2m()
-        return super().form_valid(form)
+# class ListMyOrdersView(ListView):
+#     template_name = 'list_my_orders.html'
+#     extra_context = {'title': 'List my orders', 'order_model': Order}
+#     ordering = '-start_datetime'
+
+# def get_queryset(self):
+#     user = self.request.user
+#     return Order.objects.filter()
+#
+# def order_history(request, username):
+#     order_qs = Order.objects.filter(user__username=username)
+#
+#     context = {
+#         'order_qs': order_qs,
+#     }
+#     return render(request, 'list_my_orders.html', context)
 
 
-class ListMyOrdersView(ListView):
-    template_name = 'list_my_orders.html'
-    extra_context = {'title': 'List my orders', 'order_model': Order}
-    ordering = '-start_datetime'
+# class ProductAPIView(APIView):
+#     def get(self, request):
+#         w = Product.objects.all().values()
+#         return Response({'posts': ProductSerializer(w, many=True).data})
+#
+#     def post(self, request):
+#         new_post = Product.objects.create(
+#             name=request.data['name'],
+#             category=request.data['category'],
+#             description=request.data['description'],
+#             slug=request.data['slug'],
+#             price=request.data['price'],
+#             stock=request.data['stock'],
+#             available=request.data['available'],
+#             created=request.data['created'],
+#             updated=request.data['updated']
+#
+#         )
+#         return Response({'post': model_to_dict(new_post)})
 
-    def get_queryset(self):
-        user = self.request.user
-        return Order.objects.filter()
 
-    def order_history(request, username):
-        order_qs = Order.objects.filter(user__username=username)
-
-        context = {
-            'order_qs': order_qs,
-        }
-        return render(request, 'list_my_orders.html', context)
+#
+# class Home(ListView):
+#     model = Category
+#     template_name = 'home.html'
 
 
 def home(request, category_slug=None):
